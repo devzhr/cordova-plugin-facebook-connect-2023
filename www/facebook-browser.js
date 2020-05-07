@@ -78,7 +78,7 @@ exports.login = function login (permissions, s, f) {
       }
     } else { // In case that no response is available (e.g. popup dismissed)
       f('No response')
-    }
+    } 
   }, options)
 }
 
@@ -109,7 +109,7 @@ exports.logPurchase = function logPurchase (value, currency, s, f) {
       logPurchase(value, currency, s, f);
     });
   }
-
+  
   FB.AppEvents.logPurchase(value, currency);
 
   if(s) s();
@@ -152,18 +152,9 @@ exports.browserInit = function browserInit (appId, version, s) {
 if (window.location.protocol === "file:") {
   console.warn("Facebook JS SDK is not supported when using file:// protocol");
 } else {
-  var appId = APP_ID; // APP_ID is populated by the cordova after_prepare hook
-
-  console.log('cordova-Facebook initing with app ID', appId);
-  window.CordovaFB = FB;
-
-  window.fbAsyncInit = function(facebookAppId) {
-    if (!facebookAppId) {
-      console.warn('Tried to init FB without APP ID');
-    }
-
+  window.fbAsyncInit = function() {
     FB.init({
-      appId      : facebookAppId,
+      appId      : APP_ID,  // APP_ID is populated by the cordova after_prepare hook
       xfbml      : true,
       version    : 'v2.7'
     });
