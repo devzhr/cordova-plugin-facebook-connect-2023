@@ -254,6 +254,8 @@ public class ConnectPlugin extends CordovaPlugin {
                 LoginManager.getInstance().logOut();
             }
             FacebookSdk.setApplicationId(args.getString(0));
+            FacebookSdk.setApplicationName(args.getString(1));
+
             callbackContext.success();
         } else if (action.equals("logout")) {
             if (hasAccessToken()) {

@@ -214,8 +214,8 @@
     if ([command.arguments count] > 0) {
         permissions = command.arguments;
     }
-    
-    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions; 
+
+    NSSet *grantedPermissions = [FBSDKAccessToken currentAccessToken].permissions;
 
     for (NSString *value in permissions) {
     	NSLog(@"Checking permission %@.", value);
@@ -226,14 +226,34 @@
             return;
         }
     }
-    
+
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK
     												 messageAsString:@"All permissions have been accepted"];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
     return;
 }
 
-- (void) logout:(CDVInvokedUrlCommand*)command
+- (void) changeAppId:(CDVInvokedUrlCommand*):command
+{
+    // LogOut is required to avoid accessToken conflicts
+    if ([FBSDKAccessToken currentAccessToken]) {
+        // Close the session and clear the cache
+        if (self.loginManager == nil) {
+            self.loginManager = [[FBSDKLoginManager alloc] init];
+        }
+
+        [self.loginManager logOut];
+    }
+
+    // Change the SDK settings
+    FBSDKSettings.setAppID([command.arguments objectAtIndex:0])
+    FBSDKSettings.setDisplayName([command.arguments objectAtIndex:1]);
+
+    CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void) logout:(CDVInvokedUrlCommand*)https://github.com/hpeinar/cordova-plugin-facebook4/blob/master/src/ios/FacebookConnectPlugin.m
 {
     if ([FBSDKAccessToken currentAccessToken]) {
         // Close the session and clear the cache
@@ -790,7 +810,7 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     }
     // Required by FBSDKCoreKit for deep linking/to complete login
     [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:[options valueForKey:@"UIApplicationOpenURLOptionsSourceApplicationKey"] annotation:0x0];
-    
+
     // NOTE: Cordova will run a JavaScript method here named handleOpenURL. This functionality is deprecated
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
@@ -817,7 +837,7 @@ void FBMethodSwizzle(Class c, SEL originalSelector) {
     // but will cause you to see JavaScript errors if you do not have window.handleOpenURL defined:
     // https://github.com/Wizcorp/phonegap-facebook-plugin/issues/703#issuecomment-63748816
     NSLog(@"FB handle url using application:openURL:sourceApplication:annotation: %@", url);
-    
+
     // Call existing method
     return [self swizzled_application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
