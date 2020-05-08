@@ -247,7 +247,6 @@
     NSString *newAppId = [command argumentAtIndex:0];
     NSString *newAppName = [command argumentAtIndex:1];
 
-    [FBSDKSettings setDefaultAppID:newAppId];
     [FBSDKSettings setAppID:newAppId];
     [FBSDKSettings setDisplayName:newAppName];
 
