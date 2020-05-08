@@ -233,9 +233,8 @@
     return;
 }
 
-- (void) changeAppId:(CDVInvokedUrlCommand*):command
+- (void) changeAppId:(CDVInvokedUrlCommand*)command
 {
-    // LogOut is required to avoid accessToken conflicts
     if ([FBSDKAccessToken currentAccessToken]) {
         // Close the session and clear the cache
         if (self.loginManager == nil) {
@@ -245,15 +244,18 @@
         [self.loginManager logOut];
     }
 
-    // Change the SDK settings
-    FBSDKSettings.setAppID([command.arguments objectAtIndex:0])
-    FBSDKSettings.setDisplayName([command.arguments objectAtIndex:1]);
+    NSString *newAppId = [command argumentAtIndex:0];
+    NSString *newAppName = [command argumentAtIndex:1];
 
+    [FBSDKSettings setAppID:newAppId];
+    [FBSDKSettings setDisplayName:newAppName];
+
+    // Else just return OK we are already logged out
     CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
-- (void) logout:(CDVInvokedUrlCommand*)https://github.com/hpeinar/cordova-plugin-facebook4/blob/master/src/ios/FacebookConnectPlugin.m
+- (void) logout:(CDVInvokedUrlCommand*)command
 {
     if ([FBSDKAccessToken currentAccessToken]) {
         // Close the session and clear the cache
