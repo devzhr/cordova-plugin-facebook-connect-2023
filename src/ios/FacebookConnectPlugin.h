@@ -19,10 +19,15 @@
 @interface FacebookConnectPlugin : CDVPlugin <FBSDKSharingDelegate, FBSDKGameRequestDialogDelegate>
 - (void)getLoginStatus:(CDVInvokedUrlCommand *)command;
 - (void)getAccessToken:(CDVInvokedUrlCommand *)command;
+- (void)setAutoLogAppEventsEnabled:(CDVInvokedUrlCommand *)command;
+- (void)setAdvertiserIDCollectionEnabled:(CDVInvokedUrlCommand *)command;
+- (void)setAdvertiserTrackingEnabled:(CDVInvokedUrlCommand *)command;
 - (void)logEvent:(CDVInvokedUrlCommand *)command;
 - (void)logPurchase:(CDVInvokedUrlCommand *)command;
 - (void)login:(CDVInvokedUrlCommand *)command;
 - (void)checkHasCorrectPermissions:(CDVInvokedUrlCommand *)command;
+- (void)isDataAccessExpired:(CDVInvokedUrlCommand *)command;
+- (void)reauthorizeDataAccess:(CDVInvokedUrlCommand *)command;
 - (void)logout:(CDVInvokedUrlCommand *)command;
 - (void)changeAppId:(CDVInvokedUrlCommand *)command;
 - (void)graphApi:(CDVInvokedUrlCommand *)command;
